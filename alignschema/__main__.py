@@ -46,7 +46,7 @@ def generate(entry, **kwargs):
 
         else:
             if v:
-                fields.append('{} AS {}'.format(v, k))
+                fields.append('"{}" AS "{}"'.format(v, k))
 
     # Finally, generate the -sql flag
     layer = entry.get('layer', path.splitext(path.basename(entry.get('src_datasource_name')))[0])
