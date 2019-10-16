@@ -20,9 +20,11 @@ alignschema input.csv -t_srs EPSG:4326
 ### Usage
 
 ```
-usage: alignschema [-h] [-n] [-d DST_DATASOURCE_NAME] csvfile
+usage: alignschema [-h] [--dry-run]
+                   [--dst-datasource-name DST_DATASOURCE_NAME] [--layer LAYER]
+                   csvfile
 
-Construct an ogr2ogr command that maps field names based on a CSV
+Construct an ogr2ogr command that maps field names based on a CSV.
 
 positional arguments:
   csvfile               Contains columns that match ogr2ogr import options.
@@ -31,8 +33,9 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -n, --dry-run         Only echo command
-  -d DST_DATASOURCE_NAME, --dst-datasource-name DST_DATASOURCE_NAME
+  --dry-run             echo command, do not execute
+  --dst-datasource-name DST_DATASOURCE_NAME
+  --layer LAYER
 
 Additional arguments are passed to ogr2ogr.
 ```

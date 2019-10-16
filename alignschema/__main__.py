@@ -58,16 +58,16 @@ def generate(entry, **kwargs):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Construct an ogr2ogr command that maps field names based on a CSV",
+        description="Construct an ogr2ogr command that maps field names based on a CSV.",
         epilog="Additional arguments are passed to ogr2ogr."
     )
     parser.add_argument('csvfile', help=(
         'Contains columns that match ogr2ogr import options. '
         'Any unrecognized columns will be used in sql statement, e.g. SELECT value AS column'
     ))
-    parser.add_argument('-n', '--dry-run', action='store_true', help='echo command, do not execute')
-    parser.add_argument('-d', '--dst-datasource-name', type=str)
-    parser.add_argument('-l', '--layer', type=str)
+    parser.add_argument('--dry-run', action='store_true', help='echo command, do not execute')
+    parser.add_argument('--dst-datasource-name', type=str)
+    parser.add_argument('--layer', type=str)
 
     args, extra = parser.parse_known_args()
 
