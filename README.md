@@ -17,6 +17,10 @@ This will generate two `ogr2ogr` commands. In the second command, the `skipfailu
 alignschema input.csv -t_srs EPSG:4326
 ```
 
+Values in the csv that are wrapped in single quotes will be treated like string literals.
+
+Additional arguments will be string interpolated based on the values in the fieldmap. So for instance in the argument `-oo CLOSING_STATEMENTS="ALTER TABLE {nln} SET OWNER to foo"`, `{nln}` will be replaced by the value of the `nln` field.
+
 ### Usage
 
 ```

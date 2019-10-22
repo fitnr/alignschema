@@ -31,7 +31,7 @@ def generate(entry, **kwargs):
     # First, append positional arguments
     for k in OGR2OGR_OPTIONS['positional']:
         if k in entry:
-            output.append('"{}"'.format(entry[k]))
+            output.append("'{}'".format(entry[k]))
 
     # Next, append options and flags
     for k, v in entry.items():
@@ -46,12 +46,20 @@ def generate(entry, **kwargs):
 
         else:
             if v:
-                fields.append('"{}" AS "{}"'.format(v, k))
+                if v.startswith("'") and v.endswith("'"):
+                    f = '{} AS {}'
+                else:
+                    f = 'a.{} AS {}'
+
+                fields.append(f.format(v, k))
 
     # Finally, generate the -sql flag
-    layer = entry.get('layer', path.splitext(path.basename(entry.get('src_datasource_name')))[0])
-    sql = ['-sql', """'SELECT {} FROM "{}"'""".format(', '.join(fields), layer)]
-    output.extend(sql)
+    if fields:
+        if entry['layer'] == '':
+            del entry['layer']
+        layer = entry.get('layer', path.splitext(path.basename(entry.get('src_datasource_name')))[0])
+        sql = ['-sql', '"SELECT {} FROM \\"{}\\" a"'.format(', '.join(fields), layer)]
+        output.extend(sql)
 
     return output
 
@@ -81,7 +89,8 @@ def main():
         reader = csv.DictReader(f)
         for row in reader:
             result = generate(row, **kwargs)
-            command = ['ogr2ogr'] + result + extra
+            extra_interp = [x.format(**row, **kwargs) for x in extra]
+            command = ['ogr2ogr'] + result + extra_interp
 
             if args.dry_run:
                 print(' '.join(command))
