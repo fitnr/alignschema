@@ -24,14 +24,13 @@ OGR2OGR_OPTIONS = {
 }
 
 
-def generate(entry, **kwargs):
+def generate(entry):
     output, fields = [], []
-    entry.update(kwargs)
 
     # First, append positional arguments
     for k in OGR2OGR_OPTIONS['positional']:
         if k in entry:
-            output.append("'{}'".format(entry[k]))
+            output.append("{}".format(entry[k]))
 
     # Next, append options and flags
     for k, v in entry.items():
@@ -88,8 +87,9 @@ def main():
     with open(args.csvfile, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            result = generate(row, **kwargs)
-            extra_interp = [x.format(**row, **kwargs) for x in extra]
+            row.update(kwargs)
+            result = generate(row)
+            extra_interp = [x.format(**row) for x in extra]
             command = ['ogr2ogr'] + result + extra_interp
 
             if args.dry_run:
